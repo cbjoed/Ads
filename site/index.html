@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A simple Pomodoro timer and task list.">
+  <title>Focus Timer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <p class="eyebrow">Focus better</p>
+      <h1>Focus Timer</h1>
+      <p class="subtitle">A simple Pomodoro timer for your next task.</p>
+    </header>
+
+    <section class="timer-card" aria-labelledby="timer-heading">
+      <div class="session-label" id="timer-heading">Focus session</div>
+      <output id="time" class="time" aria-live="polite">25:00</output>
+      <div class="controls">
+        <button id="start" type="button">Start</button>
+        <button id="reset" class="secondary" type="button">Reset</button>
+      </div>
+      <label class="duration-label" for="duration">
+        Focus duration
+        <select id="duration">
+          <option value="25">25 minutes</option>
+          <option value="45">45 minutes</option>
+          <option value="50">50 minutes</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="tasks" aria-labelledby="tasks-heading">
+      <div class="section-heading">
+        <h2 id="tasks-heading">Today's tasks</h2>
+        <span id="task-count">0 remaining</span>
+      </div>
+      <form id="task-form">
+        <label class="sr-only" for="task-input">New task</label>
+        <input id="task-input" type="text" maxlength="120" placeholder="What will you focus on?" required>
+        <button type="submit">Add task</button>
+      </form>
+      <ul id="task-list" aria-live="polite"></ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
