@@ -3,9 +3,19 @@ name: Deploy Blazor WASM to GitHub Pages
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,31 +27,27 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install dependencies
-      run: dotnet restore
-
-    - name: Build Blazor WebAssembly
-      run: dotnet build -c Release --no-restore
+    - name: Configure GitHub Pages
+      id: pages
+      uses: actions/configure-pages@v5
 
     - name: Publish Blazor App
-      run: dotnet publish -c Release -o ./publish
-
-    - name: Prepare docs folder
       run: |
-        rm -rf ./docs
-        mkdir -p ./docs
-        cp -r ./publish/wwwroot/* ./docs/
-        echo "Contents of docs folder:"
-        ls -la ./docs/
+        dotnet publish -c Release -o ./publish
+        touch ./publish/wwwroot/.nojekyll
 
-    - name: Add .nojekyll file
-      run: touch ./docs/.nojekyll
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./publish/wwwroot
 
-    - name: Commit and push to main
-      run: |
-        git config --local user.email "github-actions@github.com"
-        git config --local user.name "GitHub Actions"
-        git add docs/
-        git commit -m "Deploy: Build Blazor app to docs folder" || true
-        git push
-
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
