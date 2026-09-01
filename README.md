@@ -174,15 +174,14 @@ git push origin main
 
 1. Go to your repository settings
 2. Scroll to **Pages**
-3. Set **Source** to `Deploy from a branch`
-4. Select `gh-pages` branch (created automatically by the workflow)
-5. Click **Save**
+3. Set **Source** to `GitHub Actions`
+4. Click **Save**
 
 ### 3. GitHub Actions Workflow
 
 The `.github/workflows/deploy.yml` automatically:
 - Builds the Blazor WASM project in Release mode
-- Publishes to the `gh-pages` branch
+- Uploads the publish output as a GitHub Pages artifact
 - Includes `CNAME` file for custom domain
 - Deploys the static files to GitHub Pages
 
