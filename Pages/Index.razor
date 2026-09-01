@@ -61,16 +61,16 @@
                     <div class="ambience-section mt-4">
                         <h5>🎵 Ambient Sounds</h5>
                         <div class="btn-group w-100" role="group">
-                            <button type="button" class="btn btn-outline-secondary" @onclick="() => ToggleAmbience('nature')">
+                            <button type="button" class="btn btn-outline-secondary" @onclick="@(() => ToggleAmbience(\"nature\"))">
                                 🌿 Nature
                             </button>
-                            <button type="button" class="btn btn-outline-secondary" @onclick="() => ToggleAmbience('rain')">
+                            <button type="button" class="btn btn-outline-secondary" @onclick="@(() => ToggleAmbience(\"rain\"))">
                                 🌧️ Rain
                             </button>
-                            <button type="button" class="btn btn-outline-secondary" @onclick="() => ToggleAmbience('cafe')">
+                            <button type="button" class="btn btn-outline-secondary" @onclick="@(() => ToggleAmbience(\"cafe\"))">
                                 ☕ Cafe
                             </button>
-                            <button type="button" class="btn btn-outline-secondary" @onclick="() => ToggleAmbience('silence')">
+                            <button type="button" class="btn btn-outline-secondary" @onclick="@(() => ToggleAmbience(\"silence\"))">
                                 🔇 Silence
                             </button>
                         </div>
