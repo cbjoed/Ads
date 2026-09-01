@@ -1,13 +1,11 @@
-name: Deploy to GitHub Pages
+name: Deploy Blazor WASM to GitHub Pages
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,13 +27,18 @@ jobs:
     - name: Build Blazor WebAssembly
       run: dotnet build -c Release --no-restore
 
-    - name: Publish
-      run: dotnet publish -c Release -o ./publish
+    - name: Publish Blazor App
+      run: dotnet publish -c Release -o ./publish/app
 
-    - name: Copy wwwroot to build output
+    - name: Prepare GitHub Pages output
       run: |
-        cp -r ./wwwroot/* ./publish/wwwroot/
-        ls -la ./publish/wwwroot/
+        mkdir -p ./publish/pages
+        cp -r ./publish/app/wwwroot/* ./publish/pages/
+        echo "Contents of publish/pages:"
+        ls -la ./publish/pages/
+
+    - name: Add .nojekyll file
+      run: touch ./publish/pages/.nojekyll
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
@@ -43,7 +46,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './publish/wwwroot'
+        path: './publish/pages'
 
     - name: Deploy to GitHub Pages
       id: deployment
