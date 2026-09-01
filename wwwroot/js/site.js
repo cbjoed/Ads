@@ -55,23 +55,11 @@ window.adInterop = {
     }
 };
 
-// Handle Blazor error UI
-const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
-function updateErrorUI() {
-    const errorUi = document.getElementById('blazor-error-ui');
-    errorUi.style.display = darkMode.matches ? 'block' : 'none';
-}
-
-darkMode.addEventListener('change', updateErrorUI);
-
 document.addEventListener('keydown', function (event) {
     if (event.key == "Escape") {
         const errorUi = document.getElementById('blazor-error-ui');
-        errorUi?.style.display = 'none';
+        if (errorUi) {
+            errorUi.style.display = 'none';
+        }
     }
 });
-
-// Service Worker registration for PWA capabilities (optional)
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-}
