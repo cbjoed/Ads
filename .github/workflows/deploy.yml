@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build Blazor WebAssembly
+      run: dotnet build -c Release --no-restore
+
+    - name: Publish
+      run: dotnet publish -c Release -o ./publish
+
+    - name: Copy wwwroot to build output
+      run: |
+        cp -r ./wwwroot/* ./publish/wwwroot/
+        ls -la ./publish/wwwroot/
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './publish/wwwroot'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: Create 404 fallback
+      run: |
+        if [ -f ./publish/wwwroot/404.html ]; then
+          echo "404.html already exists"
+        else
+          cp ./wwwroot/404.html ./publish/wwwroot/404.html
+        fi

@@ -1,0 +1,8 @@
+Placeholder ads.txt file for ads.cbjoed.com
+This file is used by advertisers to verify site ownership and advertising authority.
+For production, replace with your actual ads.txt content from your ad network providers.
+
+Example format:
+# Ad Network Authorization Records
+domain=google.com, owner=PublisherAccount, authorized_sellers=direct
+domain=adnetwork.com, owner=PublisherAccount, authorized_sellers=reseller
