@@ -6,6 +6,7 @@ const form = document.querySelector("#task-form");
 const input = document.querySelector("#task-input");
 const list = document.querySelector("#task-list");
 const count = document.querySelector("#task-count");
+const status = document.querySelector("#timer-status");
 
 let seconds = Number(localStorage.getItem("focus-seconds")) || Number(duration.value) * 60;
 let timerId;
@@ -15,7 +16,7 @@ function renderTime() {
   const minutes = Math.floor(seconds / 60);
   const remainder = String(seconds % 60).padStart(2, "0");
   time.textContent = `${minutes}:${remainder}`;
-  document.title = timerId ? `${time.textContent} - Focus Timer` : "Focus Timer";
+  document.title = timerId ? `${time.textContent} - Focus Lab` : "Focus Lab";
   localStorage.setItem("focus-seconds", seconds);
 }
 
@@ -23,7 +24,8 @@ function stopTimer() {
   clearInterval(timerId);
   timerId = undefined;
   start.textContent = "Start";
-  document.title = "Focus Timer";
+  document.title = "Focus Lab";
+  status.textContent = "Paused - take a breath";
 }
 
 function renderTasks() {
@@ -75,6 +77,7 @@ start.addEventListener("click", () => {
     if (seconds <= 1) {
       seconds = Number(duration.value) * 60;
       stopTimer();
+      status.textContent = "Session complete - nice work!";
       alert("Focus session complete!");
     } else {
       seconds -= 1;
@@ -82,11 +85,13 @@ start.addEventListener("click", () => {
     renderTime();
   }, 1000);
   start.textContent = "Pause";
+  status.textContent = "You are in the zone";
 });
 
 reset.addEventListener("click", () => {
   stopTimer();
   seconds = Number(duration.value) * 60;
+  status.textContent = "Fresh start unlocked";
   renderTime();
 });
 
