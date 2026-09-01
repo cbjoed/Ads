@@ -49,10 +49,3 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v4
 
-    - name: Create 404 fallback
-      run: |
-        if [ -f ./publish/wwwroot/404.html ]; then
-          echo "404.html already exists"
-        else
-          cp ./wwwroot/404.html ./publish/wwwroot/404.html
-        fi
