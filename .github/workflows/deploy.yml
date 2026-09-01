@@ -7,10 +7,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
 
     steps:
     - name: Checkout code
@@ -28,27 +24,24 @@ jobs:
       run: dotnet build -c Release --no-restore
 
     - name: Publish Blazor App
-      run: dotnet publish -c Release -o ./publish/app
+      run: dotnet publish -c Release -o ./publish
 
-    - name: Prepare GitHub Pages output
+    - name: Prepare docs folder
       run: |
-        mkdir -p ./publish/pages
-        cp -r ./publish/app/wwwroot/* ./publish/pages/
-        echo "Contents of publish/pages:"
-        ls -la ./publish/pages/
+        rm -rf ./docs
+        mkdir -p ./docs
+        cp -r ./publish/wwwroot/* ./docs/
+        echo "Contents of docs folder:"
+        ls -la ./docs/
 
     - name: Add .nojekyll file
-      run: touch ./publish/pages/.nojekyll
+      run: touch ./docs/.nojekyll
 
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: './publish/pages'
-
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+    - name: Commit and push to main
+      run: |
+        git config --local user.email "github-actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add docs/
+        git commit -m "Deploy: Build Blazor app to docs folder" || true
+        git push
 
